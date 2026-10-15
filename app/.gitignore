@@ -1,1 +1,3 @@
 /build
+# Locally signed builds; releases are published by the GitHub workflow
+/release
