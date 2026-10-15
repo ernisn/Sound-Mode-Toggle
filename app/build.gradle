@@ -11,8 +11,22 @@ android {
         applicationId "se.ernie.soundmodetoggle"
         minSdk 21
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        // The release workflow derives these from the git tag; local builds keep the defaults
+        versionCode(Integer.parseInt(System.getenv("VERSION_CODE") ?: "1"))
+        versionName(System.getenv("VERSION_NAME") ?: "1.0")
+    }
+
+    signingConfigs {
+        // Only set up in the release workflow, which decodes the keystore from repository secrets
+        if (System.getenv("SIGNING_STORE_FILE")) {
+            release {
+                storeFile file(System.getenv("SIGNING_STORE_FILE"))
+                storePassword System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias System.getenv("SIGNING_KEY_ALIAS")
+                // PKCS12 keystores use the store password for the key as well
+                keyPassword System.getenv("SIGNING_STORE_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -20,6 +34,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.findByName("release")
         }
     }
 

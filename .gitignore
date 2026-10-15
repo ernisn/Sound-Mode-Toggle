@@ -13,6 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Signing keys live outside the repo (CI gets them from repository secrets)
+*.jks
+*.keystore
 # Gradle user home accidentally pointed at the project root
 /caches/
 /daemon/
