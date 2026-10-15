@@ -13,3 +13,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Gradle user home accidentally pointed at the project root
+/caches/
+/daemon/
+/native/
+/wrapper/
+/android/
+/.tmp/
