@@ -2,4 +2,7 @@
 <resources>
 
     <style name="Theme.SoundModeToggle" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Small dialog over the launcher, dark variant in values-night -->
+    <style name="Theme.SoundModeToggle.Settings" parent="android:Theme.DeviceDefault.Light.Dialog.MinWidth" />
 </resources>

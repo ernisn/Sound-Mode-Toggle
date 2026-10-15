@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.widget.Toast
 
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +17,7 @@ class MainActivity : Activity() {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
 
             // Check if first run or permission not granted
-            val prefs = getSharedPreferences("se.ernie.soundmodetoggle.prefs", Context.MODE_PRIVATE)
+            val prefs = ModeSettings.prefs(this)
             val isFirstRun = prefs.getBoolean("first_run", true)
 
             if (isFirstRun || !notificationManager.isNotificationPolicyAccessGranted) {
@@ -37,15 +38,20 @@ class MainActivity : Activity() {
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         try {
-            val currentMode = audioManager.ringerMode
-            if (currentMode == AudioManager.RINGER_MODE_NORMAL) {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
-            } else {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-            }
+            // Cycle Sound -> Vibrate -> Silent -> Sound, skipping modes turned off in settings
+            val enabled = ModeSettings.enabledModes(ModeSettings.prefs(this))
+            audioManager.ringerMode = ModeSettings.nextMode(audioManager.ringerMode, enabled).value
+
+            // Read the mode back, some devices adjust the requested mode (e.g. Silent under DND)
+            showMode(audioManager.ringerMode)
         } catch (e: Exception) {
             vibrateBriefly()
         }
+    }
+
+    private fun showMode(mode: Int) {
+        val ringerMode = RingerMode.of(mode) ?: return
+        Toast.makeText(applicationContext, ringerMode.label, Toast.LENGTH_SHORT).show()
     }
 
     private fun vibrateBriefly() {

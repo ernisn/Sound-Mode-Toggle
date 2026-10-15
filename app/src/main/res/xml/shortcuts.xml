@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Long-press menu on the launcher icon (Android 7.1+) -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="25">
+    <shortcut
+        android:shortcutId="settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_settings"
+        android:shortcutShortLabel="@string/settings_shortcut_short"
+        android:shortcutLongLabel="@string/settings_shortcut_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="se.ernie.soundmodetoggle"
+            android:targetClass="se.ernie.soundmodetoggle.SettingsActivity" />
+    </shortcut>
+</shortcuts>
